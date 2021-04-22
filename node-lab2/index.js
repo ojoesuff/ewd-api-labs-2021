@@ -7,6 +7,7 @@ import fs from 'fs';
 import 'dotenv/config';
 import { ServerError } from './responses';
 import './db';
+import './seedData';
 
 const app = express();
 const port = process.env.PORT;

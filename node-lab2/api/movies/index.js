@@ -1,5 +1,4 @@
 import express from 'express';
-import { movies, movieReviews, movieDetails } from './moviesData';
 import {NotFound} from './../../responses';
 import uniqid from 'uniqid';
 
