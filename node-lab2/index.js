@@ -8,6 +8,7 @@ import 'dotenv/config';
 import { ServerError } from './responses';
 import './db';
 import './seedData';
+import usersRouter from './api/users';
 
 const app = express();
 const port = process.env.PORT;
@@ -25,6 +26,7 @@ app.use('/api/movies', moviesRouter);
 app.use('/api/genres', genresRouter);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(errorHandler);
+app.use('/api/users', usersRouter);
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
