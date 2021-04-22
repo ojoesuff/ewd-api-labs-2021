@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import moviesRouter from './api/movies/index.js';
+import genresRouter from './api/genres/index.js';
 import swaggerUi from 'swagger-ui-express';
 import yaml from 'js-yaml';
 import fs from 'fs';
@@ -16,6 +17,8 @@ const port = process.env.PORT;
 app.use(express.json());
 
 app.use('/api/movies', moviesRouter);
+
+app.use('/api/genres', genresRouter);
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

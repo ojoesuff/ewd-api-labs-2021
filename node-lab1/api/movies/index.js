@@ -1,6 +1,7 @@
 import express from 'express';
 import { movies, movieReviews, movieDetails } from './moviesData.js';
 import uniqid from 'uniqid'
+import { notFound } from '../responses/index.js'
 
 const router = express.Router(); 
 router.get('/', (req, res) => {
@@ -13,10 +14,7 @@ router.get('/:id/reviews', (req, res) => {
     if (movieReviews.id == id) {
         res.status(200).json(movieReviews);
     } else {
-        res.status(404).json({
-            message: 'The resource you requested could not be found.',
-            status_code: 404
-        });
+        res.status(404).json(notFound);
     }
 });
 // Get movie details
@@ -25,10 +23,7 @@ router.get('/:id', (req, res) => {
     if (movieDetails.id == id) {
         res.status(200).json(movieDetails);
     } else {
-        res.status(404).json({
-            message: 'The resource you requested could not be found.',
-            status_code: 404
-        });
+        res.status(404).json(notFound);
     }
 });
 
@@ -43,10 +38,7 @@ router.post('/:id/reviews', (req, res) => {
         movieReviews.results.push(req.body); //push the new review onto the list
         res.status(201).json(req.body);
     } else {
-        res.status(404).json({
-            message: 'The resource you requested could not be found.',
-            status_code: 404
-        });
+        res.status(404).json(notFound);
     }
 });
 
