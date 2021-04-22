@@ -1,9 +1,12 @@
 import express from 'express';
-import { genres } from './genresData';
+import genreModel from './genreModel';
 
 const router = express.Router();
-router.get('/', (req, res) => {
-    res.status(200).json(genres);
+
+// Get all genres
+router.get('/', async (req, res) => {
+    const users = await genreModel.find();
+    res.status(200).json(users);
 });
 
 export default router;

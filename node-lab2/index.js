@@ -9,6 +9,7 @@ import { ServerError } from './responses';
 import './db';
 import './seedData';
 import usersRouter from './api/users';
+import genreRouter from './api/genres'
 
 const app = express();
 const port = process.env.PORT;
@@ -25,8 +26,10 @@ app.use(express.json());
 app.use('/api/movies', moviesRouter);
 app.use('/api/genres', genresRouter);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use(errorHandler);
 app.use('/api/users', usersRouter);
+app.use('./api/genres', genreRouter);
+app.use(errorHandler);
+
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
