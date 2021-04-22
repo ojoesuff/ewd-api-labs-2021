@@ -26,10 +26,33 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id;
     const movie = await movieModel.findById(id).exec();
     if (movie) {
-        res.status(200).json(movie);
+        res.status(200).json(movie.reviews);
     } else {
         res.status(404).json(NotFound);
     }
 });
+
+// Get movie reviews
+router.get('/:id/reviews', async (req, res) => {
+    const id = req.params.id;
+    const movie = await movieModel.findById(id).exec();
+    if (movie) {
+        res.status(200).json(movie.reviews);
+    } else {
+        res.status(404).json(NotFound);
+    }
+});
+
+// post movie review
+router.post('/:id/reviews', asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    req.body.created_at = Date.now()
+    req.body.updated_at = Date.now()
+    const movie = await movieModel.findByIdAndUpdate(id, {"reviews": req.body });
+    if (movie)
+        res.json({ success: true, token: "FakeTokenForNow" });
+    else
+        res.json(404, NotFound);
+}));
 
 export default router;
