@@ -1,5 +1,6 @@
 import express from 'express';
 import User from './userModel';
+import Movie from './../movies/movieModel'
 import { NotFound } from './../../responses';
 import asyncHandler from 'express-async-handler';
 
@@ -20,11 +21,44 @@ router.post('/', asyncHandler(async (req, res) => {
 // Update a user
 router.put('/:id', async (req, res) => {
     if (req.body._id) delete req.body._id;
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {new:true});
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (user)
         res.json(200, user);
     else
         res.json(404, NotFound);
 });
+
+router.post('/:userName/favourites', asyncHandler(async (req, res) => {
+    const newFavourite = req.body;
+    const userName = req.params.userName;
+    if (newFavourite && newFavourite.id) {
+        //kick off both async calls at the same time
+        const moviePromise = Movie.findById(newFavourite.id);
+        const userPromise = User.findByUserName(userName);
+        //wait for both promises to return before continuing
+        const movie = await moviePromise;
+        const user = await userPromise;
+        //This wont execute until both the above promises are fulfilled.
+        if (movie && user) {
+            await user.addFavourite(movie._id);
+            res.status(201).json(user);
+        }
+        else {
+            res.status(404).json(NotFound);
+        }
+    }
+    else {
+        res.status(422).json({ status_code: 422, message: "unable to process body of request" });
+    }
+}));
+
+router.get('/:userName/favourites', asyncHandler(async (req, res, next) => {
+    const userName = req.params.userName;
+    const user = await User.findByUserName(userName).populate('favourites');
+    if (user)
+        res.status(201).json(user.favourites);
+    else
+        res.status(404).json(NotFound);
+}));
 
 export default router;
